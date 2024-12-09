@@ -3,8 +3,7 @@
 
 static uint32_t MMIO_BASE;
 
-static inline void mmio_init(int raspi)
-{
+static inline void mmio_init(int raspi) {
     switch (raspi) {
         case 2:
         case 3:  MMIO_BASE = 0x3F000000; break;
@@ -13,24 +12,20 @@ static inline void mmio_init(int raspi)
     }
 }
 
-static inline void mmio_write(uint32_t reg, uint32_t data)
-{
+static inline void mmio_write(uint32_t reg, uint32_t data) {
 	*(volatile uint32_t*)(MMIO_BASE + reg) = data;
 }
 
-static inline uint32_t mmio_read(uint32_t reg)
-{
+static inline uint32_t mmio_read(uint32_t reg) {
 	return *(volatile uint32_t*)(MMIO_BASE + reg);
 }
 
-static inline void delay(int32_t count)
-{
+static inline void delay(int32_t count) {
 	asm volatile("__delay_%=: subs %[count], %[count], #1; bne __delay_%=\n"
 		 : "=r"(count): [count]"0"(count) : "cc");
 }
  
-enum
-{
+enum {
     GPIO_BASE = 0x200000,
     GPPUD = (GPIO_BASE + 0x94),
     GPPUDCLK0 = (GPIO_BASE + 0x98),
@@ -64,8 +59,7 @@ volatile unsigned int  __attribute__((aligned(16))) mbox[9] = {
     9*4, 0, 0x38002, 12, 8, 2, 3000000, 0 ,0
 };
 
-void uart_init(int raspi)
-{
+void uart_init(int raspi) {
 	mmio_init(raspi);
 	mmio_write(UART0_CR, 0x00000000);
 	mmio_write(GPPUD, 0x00000000);
@@ -88,20 +82,17 @@ void uart_init(int raspi)
  	mmio_write(UART0_CR, (1 << 0) | (1 << 8) | (1 << 9));
 }
  
-void uart_putc(unsigned char c)
-{
+void uart_putc(unsigned char c) {
 	while ( mmio_read(UART0_FR) & (1 << 5) ) { }
 	mmio_write(UART0_DR, c);
 }
 
-unsigned char uart_getc()
-{
+unsigned char uart_getc() {
 	while ( mmio_read(UART0_FR) & (1 << 4) ) { }
 	return mmio_read(UART0_DR);
 }
  
-void uart_puts(const char* str)
-{
+void uart_puts(const char* str) {
 	for (size_t i = 0; str[i] != '\0'; i ++)
 		uart_putc((unsigned char)str[i]);
 }
