@@ -11,38 +11,33 @@ export GCC=12.2.0
 export BINUTILS=2.40
 export DIR=/home/src/compilers/arm_gcc_binutils
 
-#create and go to work directory
-mkdir -p $DIR
-cd $DIR
 
-#get archives
-wget https://ftp.gnu.org/gnu/binutils/binutils-$BINUTILS.tar.gz
-wget https://ftp.gnu.org/gnu/gcc/gcc-$GCC/gcc-$GCC.tar.gz
-
-#extract archives
-tar xf binutils-$BINUTILS.tar.gz
-tar xf gcc-$GCC.tar.gz
-
-#patch
-ln -s binutils-$BINUTILS binutils-patch
-patch -p0 < arm-patch
+fprep() {
+	mkdir -p $DIR
+	cd $DIR
+w	get https://ftp.gnu.org/gnu/binutils/binutils-$BINUTILS.tar.gz
+	wget https://ftp.gnu.org/gnu/gcc/gcc-$GCC/gcc-$GCC.tar.gz
+	tar xfv binutils-$BINUTILS.tar.gz
+	tar xfv gcc-$GCC.tar.gz
+	rm *.tar.gz
+	ln -s binutils-$BINUTILS binutils-patch
+	patch -p0 < arm-patch && return 0 || return 2
+}
 
 fbinutils() {
-	mkdir build_binutils
-	cd build_binutils
-	../binutils-$BINUTILS/configure \
+	cd $DIR/binutils-$BINUTILS
+	./configure \
 		--targer=$TARGET \
 		--prefix=$PREFIX
 	echo "MAKEINFO = :" >> Makefile
 	make $JOBS all
-	make install
+	make install && return 0 || return 3
 }
 
 
 fgcc() {
-	mkdir ../build_gcc
-	cd ../build_gcc
-	../gcc-$GCC/configure \
+	cd $DIR/gcc-$GCC
+	./configure \
 		--target=$TARGET \
 		--prefix=$PREFIX \
 		--without-headers \
@@ -52,10 +47,13 @@ fgcc() {
 		--enable-languages='c' \
 		--enable-frame-pointer=no
 	make $JOBS all-gcc
-	make install-gcc
+	make install-gcc && return 0 || return 4
 }
 
 flibgcc() {
+	cd $DIR/gcc-$GCC
 	make $JOBS all-target-libgcc CFLAGS_FOR_TARGET="-g -02"
-	make install-target-libgcc
+	make install-target-libgcc && return 0 || return 5
 }
+
+{ fprep && fbinutils && fgcc && flibgcc; r=$?; } || exit 1
