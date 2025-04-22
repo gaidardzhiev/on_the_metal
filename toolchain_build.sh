@@ -56,4 +56,6 @@ flibgcc() {
 	make install-target-libgcc && return 0 || return 5
 }
 
-{ fprep && fbinutils && fgcc && flibgcc; r=$?; } || exit 1
+{ fprep && fbinutils && fgcc && flibgcc; RET=$?; } || exit 1
+
+[ "$RET" -eq 0 ] 2>/dev/null || printf "%s\n" "$RET"
