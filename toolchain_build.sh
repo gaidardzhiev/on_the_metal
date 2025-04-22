@@ -27,21 +27,35 @@ tar xf gcc-$GCC.tar.gz
 ln -s binutils-$BINUTILS binutils-patch
 patch -p0 < arm-patch
 
-#build binutils
-mkdir build_binutils
-cd build_binutils
-../binutils-$BINUTILS/configure --targer=$TARGET --prefix=$PREFIX
-echo "MAKEINFO = :" >> Makefile
-make $JOBS all
-make install
+fbinutils() {
+	mkdir build_binutils
+	cd build_binutils
+	../binutils-$BINUTILS/configure \
+		--targer=$TARGET \
+		--prefix=$PREFIX
+	echo "MAKEINFO = :" >> Makefile
+	make $JOBS all
+	make install
+}
 
-#build gcc
-mkdir ../build_gcc
-cd ../build_gcc
-../gcc-$GCC/configure --target=$TARGET --prefix=$PREFIX --without-headers --with-newlib  --with-gnu-as --with-gnu-ld --enable-languages='c' --enable-frame-pointer=no
-make $JOBS all-gcc
-make install-gcc
 
-#build libgcc.a
-make $JOBS all-target-libgcc CFLAGS_FOR_TARGET="-g -02"
-make install-target-libgcc
+fgcc() {
+	mkdir ../build_gcc
+	cd ../build_gcc
+	../gcc-$GCC/configure \
+		--target=$TARGET \
+		--prefix=$PREFIX \
+		--without-headers \
+		--with-newlib \
+		--with-gnu-as \
+		--with-gnu-ld \
+		--enable-languages='c' \
+		--enable-frame-pointer=no
+	make $JOBS all-gcc
+	make install-gcc
+}
+
+flibgcc() {
+	make $JOBS all-target-libgcc CFLAGS_FOR_TARGET="-g -02"
+	make install-target-libgcc
+}
