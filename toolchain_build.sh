@@ -1,7 +1,6 @@
 #!/bin/sh
 #the script builds binutils and gcc cross compiler for arm_v5
 
-#set vars
 export TARGET=arm-none-eabi
 export PREFIX=/opt/arm_gcc_binutils
 export PATH=$PATH:$PREFIX/bin
