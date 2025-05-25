@@ -1,5 +1,5 @@
  this is a minimal lisp interpreter that runs directly on raspberry pi hardware without any operating system
- it provides a simple interactive repl over uart allowing you to type and evaluate Lisp expressions in real time
+ it provides a simple interactive repl over uart allowing you to type and evaluate lisp expressions in real time
 
 (+ 1 2)
 
