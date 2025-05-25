@@ -31,7 +31,6 @@ typedef struct o {
 } o;
 
 o n = {T_NIL, {0}};
-
 o p[MAX_OBJS];
 size_t x = 0;
 
