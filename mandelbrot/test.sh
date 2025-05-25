@@ -8,7 +8,7 @@ SERIAL="-serial stdio"
 
 fcheck() {
 	[ ! -f "$1" ] && {
-		printf "file %s not found...\n" "$IMG";
+		printf "%s not found...\n" "$IMG";
 		exit 1;
 	}
 }
