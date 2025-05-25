@@ -1,7 +1,3 @@
-# 0 "start.S"
-# 0 "<built-in>"
-# 0 "<command-line>"
-# 1 "start.S"
 .section ".text.boot"
 .globl _start
   .org 0x8000
