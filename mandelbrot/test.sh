@@ -1,28 +1,17 @@
 #!/bin/sh
 
 IMG="kernel7.img"
-MACHINE="raspi1"
-CPU="arm1176"
-RAM="256"
-SERIAL="-serial stdio"
 
-fcheck() {
-	[ ! -f "$1" ] && {
-		printf "%s not found...\n" "$IMG";
-		exit 1;
-	}
+[ ! -f "$IMG" ] && {
+	printf "$IMG not found...\n";
+	exit 1;
 }
 
-fqemu() {
-	qemu-system-arm \
-		-M "$MACHINE" \
-		-cpu "$CPU" \
-		-m "$RAM" \
-		-kernel "$IMG" \
-		"$SERIAL" \
-		-display sdl \
-		-no-reboot \
-		-serial mon:stdio
-}
-
-{ fcheck && fqemu; } || exit 1
+qemu-system-arm \
+	-M raspi0 \
+	-cpu arm1176 \
+	-m 512 \
+	-kernel "$IMG" \
+	-serial stdio \
+	-display sdl \
+	-no-reboot
