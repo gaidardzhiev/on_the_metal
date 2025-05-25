@@ -6,7 +6,7 @@ OBJ=arm-none-eabi-objcopy
 ASFLAGS=-mcpu=arm1176jzf-s -fpic -ffreestanding
 CFLAGS=-mcpu=arm1176jzf-s -fpic -ffreestanding -std=gnu99 -O2 -Wall -Wextra
 LDFLAGS=-ffreestanding -O2 -nostdlib
-START=start.S
+START=start.s
 MAIN=main.c
 LINK=link.ld
 
@@ -24,4 +24,3 @@ $(SHELL) != $(OBJ) on_the_metal.elf -O binary kernel7.img
 
 clean:
 	rm start.o main.o on_the_metal.elf kernel7.img
-
