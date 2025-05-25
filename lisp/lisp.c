@@ -37,7 +37,7 @@ size_t x = 0;
 
 o* a(void) {
 	if (x >= MAX_OBJS) {
-		PUTS("Error: out of memory\r\n");
+		PUTS("out of memory...\r\n");
 		return &n;
 	}
 	return &p[x++];
@@ -56,12 +56,12 @@ size_t w = 0;
 
 void u(o *v) {
 	if (w < MAX_STACK) r[w++] = v;
-	else PUTS("Stack overflow\r\n");
+	else PUTS("stack overflow...\r\n");
 }
 
 o* q(void) {
 	if (w > 0) return r[--w];
-	PUTS("Stack underflow\r\n");
+	PUTS("stack underflow...\r\n");
 	return &n;
 }
 
@@ -122,7 +122,7 @@ void h(o *s, o *v) {
 		m[y].v = v;
 		y++;
 	} else {
-		PUTS("Environment full\r\n");
+		PUTS("environment full...\r\n");
 	}
 }
 
@@ -243,7 +243,7 @@ o* l(o *e) {
 	case T_SYM: {
 		o *v = g(e);
 		if (v == &n) {
-			PUTS("Unbound symbol: ");
+			PUTS("unbound symbol: ");
 			PUTS(e->s);
 			PUTS("\r\n");
 		}
@@ -270,21 +270,21 @@ o* l(o *e) {
 				o *x = l(a->p.c);
 				o *y = l(a->p.d->p.c);
 				if (x->t == T_INT && y->t == T_INT) return b(x->i + y->i);
-				PUTS("Error: + expects two integers\r\n");
+				PUTS("+ expects two integers...\r\n");
 				return &n;
 			}
 			if (S(f, e("-"))) {
 				o *x = l(a->p.c);
 				o *y = l(a->p.d->p.c);
 				if (x->t == T_INT && y->t == T_INT) return b(x->i - y->i);
-				PUTS("Error: - expects two integers\r\n");
+				PUTS("- expects two integers...\r\n");
 				return &n;
 			}
 			if (S(f, e("*"))) {
 				o *x = l(a->p.c);
 				o *y = l(a->p.d->p.c);
 				if (x->t == T_INT && y->t == T_INT) return b(x->i * y->i);
-				PUTS("Error: * expects two integers\r\n");
+				PUTS("* expects two integers...\r\n");
 				return &n;
 			}
 			if (S(f, e("/"))) {
@@ -292,24 +292,24 @@ o* l(o *e) {
 				o *y = l(a->p.d->p.c);
 				if (x->t == T_INT && y->t == T_INT) {
 					if (y->i == 0) {
-						PUTS("Error: division by zero\r\n");
+						PUTS("division by zero...\r\n");
 						return &n;
 					}
 					return b(x->i / y->i);
 				}
-				PUTS("Error: / expects two integers\r\n");
+				PUTS("/ expects two integers...\r\n");
 				return &n;
 			}
 			if (S(f, e("car"))) {
 				o *x = l(a->p.c);
 				if (x->t == T_CONS) return x->p.c;
-				PUTS("Error: car expects a cons cell\r\n");
+				PUTS("car expects a cons cell...\r\n");
 				return &n;
 			}
 			if (S(f, e("cdr"))) {
 				o *x = l(a->p.c);
 				if (x->t == T_CONS) return x->p.d;
-				PUTS("Error: cdr expects a cons cell\r\n");
+				PUTS("cdr expects a cons cell...\r\n");
 				return &n;
 			}
 			if (S(f, e("cons"))) {
@@ -318,7 +318,7 @@ o* l(o *e) {
 				return f(x, y);
 			}
 		}
-		PUTS("Unknown function or form\r\n");
+		PUTS("unknown function or form...\r\n");
 		return &n;
 	}
 	}
@@ -346,14 +346,12 @@ void readline(char *b, size_t m) {
 	}
 }
 
-#define BUF_SIZE 128
+#define B 1024
 
 void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags) {
 	uart_init(3);
 	PUTS("bare metal lisp interpreter\r\ntype lisp expressions and press enter\r\n");
-
-	char b[BUF_SIZE];
-
+	char b[B];
 	while (1) {
 		PUTS("> ");
 		readline(b, sizeof(b));
