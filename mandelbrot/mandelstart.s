@@ -2,7 +2,7 @@
 .globl _start
 	.org 0x8000
 _start:
-	/*stack pointer near top of RAM 128MB */
+	/*stack pointer near top of RAM 128MB*/
 	ldr sp, =0x8000000
 	ldr r4, =__bss_start
 	ldr r9, =__bss_end
