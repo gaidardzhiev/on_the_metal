@@ -463,7 +463,7 @@ void kernel_main(uint32_t r0 __attribute__((unused)), uint32_t r1 __attribute__(
 			mprint(v);
 			PUTS("\r\n");
 		} else {
-			PUTS("parse returned nil\r\n");
+			PUTS("parse returned null\r\n");
 		}
 	}
 }
