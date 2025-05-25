@@ -8,9 +8,9 @@ IMG="kernel7.img"
 }
 
 qemu-system-arm \
-	-M raspi \
+	-M raspi0 \
 	-cpu arm1176 \
-	-m 256 \
+	-m 512 \
 	-kernel "$IMG" \
 	-serial stdio \
 	-display sdl \
