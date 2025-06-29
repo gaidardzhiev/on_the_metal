@@ -1,6 +1,6 @@
 #!/bin/sh
 
-arm-none-eabi-gcc -mcpu=arm1176jzf-s -fpic -ffreestanding -c start.S -o start.o
+arm-none-eabi-gcc -mcpu=arm1176jzf-s -fpic -ffreestanding -c start.s -o start.o
 
 arm-none-eabi-gcc -mcpu=arm1176jzf-s -fpic -ffreestanding -std=gnu99 -c main.c -o main.o -O2 -Wall -Wextra
 
